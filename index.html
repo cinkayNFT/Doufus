@@ -87,7 +87,7 @@ Object.entries(data).forEach(([etape,list])=>{
     cb.checked=localStorage.getItem(key)==="1";
 
     const img=document.createElement("img");
-    img.src=`images/archimonstres/${etape}/${normalizeName(name)}.png`;
+    img.src=`images/${etape}/${normalizeName(name)}.png`;
     img.alt=name;
     img.style.width="32px";
     img.style.height="32px";
