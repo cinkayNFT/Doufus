@@ -1,73 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Dofus Archimonstres Tracker</title>
-
-<style>
-:root{
-  --green:#7CFFB2;
-  --dark:#0b0f0f;
-}
-*{box-sizing:border-box;font-family:Arial}
-body{margin:0;color:#fff;background:var(--dark)}
-
-/* BACKGROUND */
-.video-bg{position:fixed;inset:0;z-index:-3}
-.video-bg video{width:100%;height:100%;object-fit:cover;filter:blur(3px) grayscale(80%)}
-.video-overlay{position:fixed;inset:0;background:rgba(8,10,10,.78);z-index:-2}
-
-.container{max-width:1200px;margin:40px auto;padding:20px}
-.etape{background:#141919;border-radius:18px;padding:20px;margin-bottom:25px}
-.etape h2{color:var(--green);margin-top:0}
-
-.list{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:8px
-}
-
-.archi{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 12px;
-  border-radius:10px;
-  background:#1a2020;
-  cursor:pointer;
-  transition:.15s
-}
-.archi.checked{background:#3b4444}
-
-.archi img{
-  width:26px;
-  height:26px;
-  object-fit:contain;
-  flex-shrink:0;
-}
-
-.archi input{cursor:pointer}
-.archi span{flex:1}
-</style>
-</head>
-
-<body>
-
-<div class="video-bg">
-  <video autoplay muted loop playsinline>
-    <source src="https://duffus.fr/videos/fond.mp4" type="video/mp4">
-  </video>
-</div>
-<div class="video-overlay"></div>
-
-<div class="container">
-  <h1>Dofus Archimonstres</h1>
-  <div class="subtitle">Cliquez pour copier — cochez pour suivre votre progression</div>
-  <div id="content"></div>
-</div>
-
 <script>
-// ===== SAFE COPY =====
 function copyText(text){
   const ta=document.createElement("textarea");
   ta.value=text;
@@ -77,19 +8,14 @@ function copyText(text){
   document.body.removeChild(ta);
 }
 
-// ===== IMAGE SLUG =====
-function slugify(name){
+function normalizeName(name){
   return name
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/'/g,"")
-    .replace(/\s+/g,"-");
+    .replace(/['’]/g,"")
+    .replace(/\s+/g,"_")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"");
 }
 
-// ===== DATA (286/286) =====
-const data = {/* EXACT SAME DATA YOU PROVIDED — UNTOUCHED */};
-// ⬆️ KEEP YOUR FULL DATA HERE (I did not modify it)
-
-// ===== BUILD UI =====
 const content=document.getElementById("content");
 
 Object.entries(data).forEach(([etape,list])=>{
@@ -104,17 +30,19 @@ Object.entries(data).forEach(([etape,list])=>{
 
   list.forEach((name,i)=>{
     const key=`archi_${etape}_${i}`;
-
     const row=document.createElement("div");
     row.className="archi";
-
-    const img=document.createElement("img");
-    img.src=`archis/${slugify(name)}.webp`;
-    img.onerror=()=>img.src="https://static.ankama.com/dofus/www/game/items/200/0.png";
 
     const cb=document.createElement("input");
     cb.type="checkbox";
     cb.checked=localStorage.getItem(key)==="1";
+
+    const img=document.createElement("img");
+    img.src=`images/archimonstres/${etape}/${normalizeName(name)}.png`;
+    img.alt=name;
+    img.style.width="32px";
+    img.style.height="32px";
+    img.style.objectFit="contain";
 
     const label=document.createElement("span");
     label.textContent=name;
@@ -131,7 +59,7 @@ Object.entries(data).forEach(([etape,list])=>{
       update();
     };
 
-    cb.onclick=e=>{
+    cb.onclick=(e)=>{
       e.stopPropagation();
       copyText(name);
       update();
@@ -139,7 +67,7 @@ Object.entries(data).forEach(([etape,list])=>{
 
     if(cb.checked)row.classList.add("checked");
 
-    row.append(img,cb,label);
+    row.append(cb,img,label);
     grid.appendChild(row);
   });
 
@@ -153,6 +81,3 @@ Object.entries(data).forEach(([etape,list])=>{
   updateCounter();
 });
 </script>
-
-</body>
-</html>
