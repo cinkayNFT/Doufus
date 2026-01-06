@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <title>Dofus Archimonstres Tracker</title>
 <style>
+  :root {
+  --green:#7CFFB2;
+  --dark:#0b0f0f;
+  --card:rgba(20,25,25,.75);
+  --grey:#555;
+}
+*{box-sizing:border-box;font-family:"Barlow",system-ui,sans-serif}
+body{margin:0;color:#fff;background:var(--dark);overflow-x:hidden}
+
+/* BACKGROUND */
+.video-bg{position:fixed;inset:0;z-index:-3}
+.video-bg video{width:100%;height:100%;object-fit:cover;filter:blur(3px) grayscale(80%)}
+.video-overlay{position:fixed;inset:0;background:rgba(8,10,10,.78);z-index:-2}
+  
 body{margin:0;background:#0b0f0f;color:#fff;font-family:Arial}
 .container{max-width:1200px;margin:40px auto;padding:20px}
 .etape{background:#141919;border-radius:18px;padding:20px;margin-bottom:25px}
@@ -17,9 +31,20 @@ body{margin:0;background:#0b0f0f;color:#fff;font-family:Arial}
 </head>
 
 <body>
+
+  <div class="video-bg">
+  <video autoplay muted loop playsinline>
+    <source src="https://duffus.fr/videos/fond.mp4" type="video/mp4">
+  </video>
+</div>
+<div class="video-overlay"></div>
+  
 <div class="container">
 <h1>Dofus Archimonstres</h1>
-<div id="content"></div>
+<div class="subtitle">
+    Cliquez pour copier — cochez pour suivre votre progression
+  </div>
+  <div id="content"></div>
 </div>
 
 <script>
