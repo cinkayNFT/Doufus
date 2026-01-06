@@ -3,66 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <title>Dofus Archimonstres Tracker</title>
-
 <style>
-:root{
+  :root {
   --green:#7CFFB2;
   --dark:#0b0f0f;
+  --card:rgba(20,25,25,.75);
+  --grey:#555;
 }
-*{box-sizing:border-box;font-family:Arial,system-ui,sans-serif}
+*{box-sizing:border-box;font-family:"Barlow",system-ui,sans-serif}
 body{margin:0;color:#fff;background:var(--dark);overflow-x:hidden}
 
 /* BACKGROUND */
 .video-bg{position:fixed;inset:0;z-index:-3}
 .video-bg video{width:100%;height:100%;object-fit:cover;filter:blur(3px) grayscale(80%)}
 .video-overlay{position:fixed;inset:0;background:rgba(8,10,10,.78);z-index:-2}
-
+  
+body{margin:0;background:#0b0f0f;color:#fff;font-family:Arial}
 .container{max-width:1200px;margin:40px auto;padding:20px}
 .etape{background:#141919;border-radius:18px;padding:20px;margin-bottom:25px}
-.etape h2{color:var(--green);margin:0 0 15px}
+.etape h2{color:#7CFFB2;margin-top:0}
 .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
-
-.archi{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 12px;
-  border-radius:10px;
-  background:#1a2020;
-  cursor:pointer;
-}
+.archi{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:10px;background:#1a2020;cursor:pointer}
 .archi.checked{background:#3b4444}
 .archi input{cursor:pointer}
-
-.archi img{
-  width:26px;
-  height:26px;
-  object-fit:contain;
-  border-radius:6px;
-  background:#0f1414;
-}
-
 .archi span{flex:1}
 </style>
 </head>
 
 <body>
 
-<div class="video-bg">
+  <div class="video-bg">
   <video autoplay muted loop playsinline>
     <source src="https://duffus.fr/videos/fond.mp4" type="video/mp4">
   </video>
 </div>
 <div class="video-overlay"></div>
-
+  
 <div class="container">
-  <h1>Dofus Archimonstres</h1>
-  <div class="subtitle">Cliquez pour copier — cochez pour suivre votre progression</div>
+<h1>Dofus Archimonstres</h1>
+<div class="subtitle">
+    Cliquez pour copier — cochez pour suivre votre progression
+  </div>
   <div id="content"></div>
 </div>
 
 <script>
-// ===== SAFE COPY =====
+// ===== SAFE COPY (WORKS EVERYWHERE) =====
 function copyText(text){
   const ta=document.createElement("textarea");
   ta.value=text;
@@ -72,16 +58,7 @@ function copyText(text){
   document.body.removeChild(ta);
 }
 
-// ===== IMAGE PATH BUILDER =====
-function archiImage(etape,name){
-  const file=name
-    .replace(/['’]/g,"")
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/\s+/g,"_");
-  return `images/archimonstres/${etape}/${file}.png`;
-}
-
-// ===== DATA (286/286 — UNTOUCHED) =====
+// ===== DATA (286/286) =====
 const data = {
 20:["Arachitik la Souffreteuse","Araknay la Galopante","Arakule la Revancharde","Boudalf le Blanc","Boulgourvil le Lointain","Chamchie le Difficile","Craraboss le Féérique","Larvonika l'Instrument","Mosketère le Dévoué","Pioufe la Maquillée","Pioukas la Plante","Pioulbrineur le Mercenaire","Pioulette la Coquine","Pioussokrim le Délétère","Pioustone le Problème","Pissdane l'Insipide","Sousourizoto le Collant","Tofuldebeu l'Explosif","Tofumanchou l'Empereur","Tofurapin le Pétri"],
 21:["Bandapar l'Exclu","Bandson le Tonitruant","Boudur le Raide","Boufdégou le Refoulant","Gelanal le Huileux","Geloliaine l'Aérien","Gobstiniais le Têtu","Kolforthe l'Indécollable","Kwoanneur le Frimeur","Larchimaide la Poussée","Larvapstrè le Subjectif","Nodkoku le Trahi","Roz la Magicienne","Serpistol l'Illustre","Tikosto le Mousse","Tiwa'Missou le Gateux","Tiwalpé le Dévêtu","Tiwoflan le Lâche","Tour le Vice","Trukul le Lent"],
@@ -100,7 +77,7 @@ const data = {
 34:["Bakaglace le Congelé","Kaonucléair l'Instable","Madgang le Docteur","Roy le Merlin","Tronquette la Réduite","Tsumani l'Inondeur"]
 };
 
-// ===== BUILD UI (UNCHANGED LOGIC) =====
+// ===== BUILD UI =====
 const content=document.getElementById("content");
 
 Object.entries(data).forEach(([etape,list])=>{
@@ -121,10 +98,6 @@ Object.entries(data).forEach(([etape,list])=>{
     const cb=document.createElement("input");
     cb.type="checkbox";
     cb.checked=localStorage.getItem(key)==="1";
-
-    const img=document.createElement("img");
-    img.src=archiImage(etape,name);
-    img.alt=name;
 
     const label=document.createElement("span");
     label.textContent=name;
@@ -149,7 +122,7 @@ Object.entries(data).forEach(([etape,list])=>{
 
     if(cb.checked)row.classList.add("checked");
 
-    row.append(cb,img,label);
+    row.append(cb,label);
     grid.appendChild(row);
   });
 
